@@ -14,7 +14,6 @@ public class AudioPlayer
     //The JFXPanel starts JavaFX, otherwise you get a "Toolkit not initialized" error
     public AudioPlayer()
     {
-        final JFXPanel runtime = new JFXPanel();
         players = new ArrayList<AudioClip>();
     }
     
