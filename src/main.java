@@ -20,6 +20,9 @@ public class main extends Application {
     AudioPlayer player = new AudioPlayer();
     public static void main(String[] args) {
         launch(args);
+        AudioPlayer player = new AudioPlayer();
+        player.addAudio("music2.m4a");
+        player.playAudio();
     }
 
     double currentProgress = 0;

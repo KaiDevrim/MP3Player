@@ -25,12 +25,23 @@ public class AudioPlayer
         players.add(player);
     }
     
-    public void play()
+    public void playAudio()
     {
         players.get(0).play();
     }
     
-    public void stop()
+    public void playQue()
+    {
+        for (int i = 0; i < players.size(); i++)
+        {
+            players.get(i).play();
+            while (players.get(i).isPlaying())
+            {
+            }
+        }
+    }
+    
+    public void stopAudio()
     {
         players.get(0).stop();
     }
