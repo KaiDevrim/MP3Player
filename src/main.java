@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 public class main extends Application {
     public static void main(String[] args) {
         launch(args);
+        AudioPlayer player = new AudioPlayer();
+        player.addAudio("music2.m4a");
+        player.playAudio();
     }
 
     @Override
