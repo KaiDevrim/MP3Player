@@ -4,6 +4,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class main extends Application {
@@ -15,7 +18,8 @@ public class main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Hello World!");
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        btn.setText("▶️");
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
