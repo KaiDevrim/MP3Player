@@ -29,7 +29,7 @@ public class AudioPlayer
         player = new AudioClip(file.getSource());
         players.add(player);
     }
-    
+
     public void playAudio(String directory)
     {
         Media file = new Media(new File(directory).toURI().toString());
@@ -62,4 +62,5 @@ public class AudioPlayer
             players.get(quePos).stop();
         }
     }
+
 }

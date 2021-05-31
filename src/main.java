@@ -1,41 +1,32 @@
-import javafx.application.*;
-import javafx.beans.value.ObservableValue;
-import javafx.event.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.*;
-import javafx.stage.*;
-import javafx.util.Duration;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class main extends Application {
     AudioPlayer player = new AudioPlayer();
     public static void main(String[] args) {
         launch(args);
-        AudioPlayer player = new AudioPlayer();
-        player.addAudio("music2.m4a");
-        player.playAudio();
     }
 
     double currentProgress = 0;
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
         primaryStage.setTitle("MP3 Player");
-        String userHome = System.getProperty("user.home");
-        String desktop = userHome+"/Desktop/Music/";
-        System.out.println(desktop+"/music.mp3");
-        player.addAudio(desktop+"/music.mp3");
-        File mediaFile = new File(desktop+"/music.mp3");
-        Media media = new Media(mediaFile.toURI().toString());
-        getAudioLength(media);
+        AudioPlayer player = new AudioPlayer();
+        getPlaylist(new File("src/music/"));
+        // getAudioLength(media);
         Button btn = new Button();
         double sliderWidth = 200;
 
@@ -107,5 +98,25 @@ public class main extends Application {
         pb.setProgress(currentProgress);
         return pb;
     }
-
+    public static List<File> getPlaylist(File directory) {
+        File[] listOfFiles = directory.listFiles();
+        Set<String> validFileTypes = Set.of("M4A", "WAV", "MP3");
+        List<File> validFiles = new ArrayList<File>();
+        for (File file : listOfFiles) {
+            if (isFile(file) && hasExtension(file.getName(), validFileTypes)) {
+                    validFiles.add(file);
+            }
+        }
+        return validFiles;
+    }
+    public static boolean hasExtension(String filename, Set<String> extensions){
+        for(String extension : extensions){
+            if(filename.toLowerCase().endsWith(extension.toLowerCase())) return true;
+        }
+        return false;
+    }
+    public static boolean isFile(File file) {
+        if (file.isFile() && file.canRead() && !file.isDirectory() && !file.isHidden()) { return true; }
+        else { return false; }
+    }
 }
