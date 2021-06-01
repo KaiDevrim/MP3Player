@@ -4,11 +4,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -24,26 +24,16 @@ public class main extends Application {
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
         primaryStage.setTitle("MP3 Player");
-        AudioPlayer player = new AudioPlayer();
-        getPlaylist(new File("src/music/"));
-        // getAudioLength(media);
-        Button btn = new Button();
-        double sliderWidth = 200;
-
-        final Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(50);
-        slider.setMinWidth(sliderWidth);
-        slider.setMaxWidth(sliderWidth);
-
-        final ProgressBar pb = new ProgressBar(0);
-        pb.setMinWidth(sliderWidth);
-        pb.setMaxWidth(sliderWidth);
-
-        // ProgressBar pb = new ProgressBar();
         StackPane root = new StackPane();
-        root.getChildren().add(button(btn));
-        // root.getChildren().add(progressBar(pb));
+        AudioPlayer player = new AudioPlayer();
+
+        // getAudioLength(media);
+
+        Button mainBtn = new Button();
+        Button playlistBtn = new Button();
+
+        root.getChildren().add(mainButton(mainBtn));
+        root.getChildren().add(playlistButton(playlistBtn, primaryStage));
         primaryStage.setScene(new Scene(root, 300, 250));
         primaryStage.show();
     }
@@ -68,8 +58,7 @@ public class main extends Application {
         });
         return 0;
     }
-
-    public Button button(Button btn) {
+    public Button mainButton(Button btn) {
         btn.setText("▶︎");
         btn.setFont(Font.font("verdana",20));
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,5 +107,24 @@ public class main extends Application {
     public static boolean isFile(File file) {
         if (file.isFile() && file.canRead() && !file.isDirectory() && !file.isHidden()) { return true; }
         else { return false; }
+    }
+    public static Button playlistButton(Button btn, Stage primaryStage) {
+        btn.setText("Select a Playlist");
+        btn.setFont(Font.font("verdana",20));
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fileChooser(primaryStage);
+            }
+        });
+        return btn;
+    }
+    public static File fileChooser(Stage primaryStage) {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Choose a folder for your playlist");
+        File defaultDirectory = new File(System.getProperty("user.home"));
+        chooser.setInitialDirectory(defaultDirectory);
+        File selectedDirectory = chooser.showDialog(primaryStage);
+        return selectedDirectory;
     }
 }
