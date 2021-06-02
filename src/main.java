@@ -1,8 +1,11 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
@@ -168,11 +171,22 @@ public class main extends Application {
         return null;
     }
     public void addMusicFiles(File directory, Stage primaryStage) {
-         for (File file : getPlaylist(new File(directory.getAbsolutePath()))) {
-             System.out.println(file);
+        ObservableList<String> validFiles = FXCollections.observableArrayList();
+        ListView<String> list = new ListView<>();
+        for (File file : getPlaylist(new File(directory.getAbsolutePath()))) {
+            validFiles.add(file.getName());
+            System.out.println(file);
             player.addAudio(file);
-         }
-
-         player.playQue();
+        }
+        StackPane root = new StackPane();
+        Stage stage = new Stage();
+        root.getChildren().add(list);
+        stage.setTitle("Playlist");
+        stage.setScene(new Scene(root, 200, 250));
+        String css = main.class.getResource("myStyle.css").toExternalForm();
+        root.getStylesheets().add(css);
+        stage.show();
+        list.setItems(validFiles);
+        // player.playQue();
     }
 }
