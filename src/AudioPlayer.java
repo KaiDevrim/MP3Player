@@ -45,7 +45,7 @@ public class AudioPlayer
     {
         for (int i = 0; i < players.size() - 1; i++)
         {
-            if (players.get(i).isPlaying() == true)
+            if (players.get(i).isPlaying())
             {
                 players.get(i).stop();
                 quePos = i;
