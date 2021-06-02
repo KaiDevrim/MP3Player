@@ -54,7 +54,7 @@ public class main extends Application {
     }
     public void play(Button btn) {
         System.out.println("Play");
-        // player.play();
+        // player.resumeAudio();
         btn.setText("▶︎");
     }
     public double getAudioLength(Media media) throws InterruptedException {
@@ -117,7 +117,7 @@ public class main extends Application {
         if (file.isFile() && file.canRead() && !file.isDirectory() && !file.isHidden()) { return true; }
         else { return false; }
     }
-    public static Button playlistButton(Button btn, Stage primaryStage) {
+    public Button playlistButton(Button btn, Stage primaryStage) {
         btn.setText("Select a Playlist");
         btn.setFont(Font.font("verdana",20));
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,13 +128,14 @@ public class main extends Application {
         });
         return btn;
     }
-    public static File folderChooser(Stage primaryStage) {
+    public File folderChooser(Stage primaryStage) {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose a folder for your playlist");
         File defaultDirectory = new File(System.getProperty("user.home"));
         chooser.setInitialDirectory(defaultDirectory);
         File selectedDirectory = chooser.showDialog(primaryStage);
         if (selectedDirectory != null) {
+            addMusicFiles(selectedDirectory, primaryStage);
             return selectedDirectory;
         }
         return null;
@@ -167,9 +168,11 @@ public class main extends Application {
         return null;
     }
     public void addMusicFiles(File directory, Stage primaryStage) {
-        // for (File file : getPlaylist(new File(folderChooser(primaryStage))) {
-        //    player.addAudio(file.getAbsolutePath());
-        // }
-        // player.playQue();
+         for (File file : getPlaylist(new File(directory.getAbsolutePath()))) {
+             System.out.println(file);
+            player.addAudio(file);
+         }
+
+         player.playQue();
     }
 }
