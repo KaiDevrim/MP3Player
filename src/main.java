@@ -26,7 +26,6 @@ public class main extends Application {
     public void start(Stage primaryStage) throws InterruptedException {
         primaryStage.setTitle("MP3 Player");
         StackPane root = new StackPane();
-        AudioPlayer player = new AudioPlayer();
 
         // getAudioLength(media);
 
@@ -162,7 +161,8 @@ public class main extends Application {
         File selectedFile = chooser.showOpenDialog(primaryStage);
         // addMusicFiles(selectedFile, primaryStage);
         if (selectedFile != null) {
-            player.playAudio(selectedFile.getAbsolutePath());
+            player.addAudio(selectedFile);
+            player.playAudio();
             return selectedFile;
         }
         return null;
