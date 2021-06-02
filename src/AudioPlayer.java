@@ -17,7 +17,6 @@ public class AudioPlayer
     public AudioPlayer()
     {
         players = new ArrayList<AudioClip>();
-        players.add(null);
     }
     
     public void addAudio(File directory)
@@ -46,7 +45,7 @@ public class AudioPlayer
     {
         for (int i = 0; i < players.size() - 1; i++)
         {
-            if (players.get(i).isPlaying() == true)
+            if (players.get(i).isPlaying())
             {
                 players.get(i).stop();
                 quePos = i;

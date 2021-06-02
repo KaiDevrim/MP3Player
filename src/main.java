@@ -54,7 +54,7 @@ public class main extends Application {
     }
     public void play(Button btn) {
         System.out.println("Play");
-        // player.resumeAudio();
+        player.resumeAudio();
         btn.setText("▶︎");
     }
     public double getAudioLength(Media media) throws InterruptedException {
