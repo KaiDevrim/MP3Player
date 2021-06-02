@@ -17,7 +17,6 @@ public class AudioPlayer
     public AudioPlayer()
     {
         players = new ArrayList<AudioClip>();
-        players.add(null);
     }
     
     public void addAudio(File directory)
