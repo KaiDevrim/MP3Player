@@ -20,9 +20,10 @@ public class AudioPlayer
         players.add(null);
     }
     
-    public void addAudio(String directory)
+    public void addAudio(File directory)
     {
-        Media file = new Media(new File(directory).toURI().toString());
+        System.out.println(directory + " add");
+        Media file = new Media(directory.toURI().toString());
         AudioClip player;
         player = new AudioClip(file.getSource());
         players.add(player);
