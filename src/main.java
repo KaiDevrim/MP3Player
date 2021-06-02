@@ -9,6 +9,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -31,16 +32,24 @@ public class main extends Application {
 
         Button mainBtn = new Button();
         Button playlistBtn = new Button();
+        playlistBtn.setTranslateY(50);
+
+//        Button clearSongsBtn = new Button();
+//        Button loopSongsBtn = new Button();
+        Button fileBtn = new Button();
+        fileBtn.setTranslateY(100);
 
         root.getChildren().add(mainButton(mainBtn));
         root.getChildren().add(playlistButton(playlistBtn, primaryStage));
-        primaryStage.setScene(new Scene(root, 300, 250));
+        root.getChildren().add(fileButton(fileBtn, primaryStage));
+
+        primaryStage.setScene(new Scene(root, 500, 500));
         primaryStage.show();
     }
 
     public void pause(Button btn) {
         System.out.println("Pause");
-        // player.stop();
+        player.stopAudio();
         btn.setText("❙❙");
     }
     public void play(Button btn) {
@@ -114,17 +123,53 @@ public class main extends Application {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                fileChooser(primaryStage);
+                folderChooser(primaryStage);
             }
         });
         return btn;
     }
-    public static File fileChooser(Stage primaryStage) {
+    public static File folderChooser(Stage primaryStage) {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose a folder for your playlist");
         File defaultDirectory = new File(System.getProperty("user.home"));
         chooser.setInitialDirectory(defaultDirectory);
         File selectedDirectory = chooser.showDialog(primaryStage);
-        return selectedDirectory;
+        if (selectedDirectory != null) {
+            return selectedDirectory;
+        }
+        return null;
+    }
+    public Button fileButton(Button btn, Stage primaryStage) {
+        btn.setText("Select a File");
+        btn.setFont(Font.font("verdana",20));
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fileChooser(primaryStage);
+            }
+        });
+        return btn;
+    }
+    public File fileChooser(Stage primaryStage) {
+        FileChooser chooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("SONG files (*.m4a, *.wav, *.mp3)", "*.m4a", "*.wav", "*.mp3");
+        chooser.getExtensionFilters().add(extFilter);
+        chooser.setTitle("Choose a folder for your playlist");
+        File defaultDirectory = new File(System.getProperty("user.home"));
+        chooser.setInitialDirectory(defaultDirectory);
+        File selectedFile = chooser.showOpenDialog(primaryStage);
+        // addMusicFiles(selectedFile, primaryStage);
+        if (selectedFile != null) {
+            player.playAudio(selectedFile.getAbsolutePath());
+            return selectedFile;
+        }
+        return null;
+    }
+    public void addMusicFiles(File directory, Stage primaryStage) {
+        // for (File file : getPlaylist(new File(folderChooser(primaryStage))) {
+        //    player.addAudio(file.getAbsolutePath());
+        // }
+        // player.playQue();
     }
 }

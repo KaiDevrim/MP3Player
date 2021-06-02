@@ -1,7 +1,8 @@
-import java.io.*;
-import javafx.scene.media.*;
-import javafx.embed.swing.JFXPanel;
-import java.util.*;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+
+import java.io.File;
+import java.util.ArrayList;
 /**
  * plays audio
  * 
@@ -52,12 +53,12 @@ public class AudioPlayer
     
     public void stopAudio()
     {
-        if (singlePlayer.get(0).isPlaying() == true)
+        if (singlePlayer.get(0).isPlaying())
         {
             singlePlayer.get(0).stop();
         }
 
-        if (players.get(quePos).isPlaying() == true)
+        else if (players.get(quePos).isPlaying())
         {
             players.get(quePos).stop();
         }
