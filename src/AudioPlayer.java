@@ -13,14 +13,11 @@ public class AudioPlayer
 {
     private int quePos;
     private ArrayList<AudioClip> players;
-    private ArrayList<AudioClip> singlePlayer;
     //The JFXPanel starts JavaFX, otherwise you get a "Toolkit not initialized" error
     public AudioPlayer()
     {
         players = new ArrayList<AudioClip>();
-        singlePlayer = new ArrayList<AudioClip>();
         players.add(null);
-        singlePlayer.add(null);
     }
     
     public void addAudio(String directory)
@@ -36,9 +33,26 @@ public class AudioPlayer
         Media file = new Media(new File(directory).toURI().toString());
         AudioClip clip = new AudioClip(file.getSource());
         clip.play();
-        singlePlayer.set(0, clip);
+        players.add(clip);
     }
     
+    public void resumeAudio()
+    {
+        players.get(quePos).play();
+    }
+    
+    public void stopAudio()
+    {
+        for (int i = 0; i < players.size() - 1; i++)
+        {
+            if (players.get(i).isPlaying() == true)
+            {
+                players.get(i).stop();
+                quePos = i;
+            }
+        }
+    }
+
     public void playQue()
     {
         for (int i = 0; i < players.size(); i++)
@@ -50,18 +64,4 @@ public class AudioPlayer
             }
         }
     }
-    
-    public void stopAudio()
-    {
-        if (singlePlayer.get(0).isPlaying())
-        {
-            singlePlayer.get(0).stop();
-        }
-
-        else if (players.get(quePos).isPlaying())
-        {
-            players.get(quePos).stop();
-        }
-    }
-
 }
