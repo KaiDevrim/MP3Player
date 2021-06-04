@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,17 +49,18 @@ public class main extends Application {
 
         primaryStage.setScene(new Scene(root, 500, 500));
         primaryStage.show();
+
     }
 
     public void pause(Button btn) {
         System.out.println("Pause");
-        player.stopAudio();
-        btn.setText("❙❙");
+        player.pauseAudio();
+        btn.setText("▶︎");
     }
     public void play(Button btn) {
         System.out.println("Play");
         player.resumeAudio();
-        btn.setText("▶︎");
+        btn.setText("❙❙");
     }
     public double getAudioLength(Media media) throws InterruptedException {
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -70,17 +73,17 @@ public class main extends Application {
         return 0;
     }
     public Button mainButton(Button btn) {
-        btn.setText("▶︎");
+        btn.setText("❙❙");
         btn.setFont(Font.font("verdana",20));
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
                 if (btn.getText().equals("❙❙")) {
-                    play(btn);
+                    pause(btn);
                 }
                 else if (btn.getText().equals("▶︎")) {
-                    pause(btn);
+                    play(btn);
                 }
             }
         });
@@ -137,7 +140,7 @@ public class main extends Application {
         chooser.setInitialDirectory(defaultDirectory);
         File selectedDirectory = chooser.showDialog(primaryStage);
         if (selectedDirectory != null) {
-            addMusicFiles(selectedDirectory, primaryStage);
+            playlist(selectedDirectory, primaryStage);
             return selectedDirectory;
         }
         return null;
@@ -170,23 +173,48 @@ public class main extends Application {
         }
         return null;
     }
-    public void addMusicFiles(File directory, Stage primaryStage) {
+    public void playlist(File directory, Stage primaryStage) {
         ObservableList<String> validFiles = FXCollections.observableArrayList();
         ListView<String> list = new ListView<>();
         for (File file : getPlaylist(new File(directory.getAbsolutePath()))) {
-            validFiles.add(file.getName());
+            validFiles.add(file.getAbsolutePath());
             System.out.println(file);
             player.addAudio(file);
         }
+        Button playlistPlayButton = new Button();
+        playlistPlayButton.setFont(Font.font("verdana",20));
+        playlistPlayButton.setText("▶︎");
+        playlistPlayButton.setTranslateY(20);
+        playlistPlayButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(directory);
+                System.out.println(getPlaylist(directory));
+                player.playQue(getPlaylist(directory));
+                player.playAudio();
+            }
+        });
         StackPane root = new StackPane();
         Stage stage = new Stage();
         root.getChildren().add(list);
+        root.getChildren().add(playlistPlayButton);
         stage.setTitle("Playlist");
         stage.setScene(new Scene(root, 200, 250));
         String css = main.class.getResource("myStyle.css").toExternalForm();
         root.getStylesheets().add(css);
         stage.show();
         list.setItems(validFiles);
-        // player.playQue();
+        list.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                player.stopAudio();
+                player.removeAudio();
+                player.addAudio(new File(newValue));
+                player.playAudio();
+                System.out.println("Selected item: " + newValue);
+            }
+        });
+        player.playQue(getPlaylist(directory));
     }
 }
