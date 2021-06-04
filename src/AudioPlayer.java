@@ -1,3 +1,4 @@
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -33,7 +34,7 @@ public class AudioPlayer
     public void playAudio()
     {
         players.get(quePos).play();
-        System.out.println(players.get(quePos).getMedia().getDuration().toSeconds());
+        System.out.println(players.get(quePos).getMedia().getDuration());
     }
     
     public void pauseAudio()
@@ -66,10 +67,8 @@ public class AudioPlayer
         for (int i = 0; i < players.size(); i++)
         {
             quePos = i;
-            players.get(quePos).play();
-            while (players.get(quePos).getStatus().equals(Status.PLAYING))
-            {
-            }
+            players.get(i).play();
+            //wait(players.get(quePos).getCycleDuration());
         }
     }
 
