@@ -1,10 +1,11 @@
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * plays audio
  * 
@@ -24,7 +25,6 @@ public class AudioPlayer
     //Adds a MediaPlayer to the ArrayList, players
     public void addAudio(File directory)
     {
-        System.out.println(directory + " add");
         Media file = new Media(directory.toURI().toString());
         MediaPlayer player;
         player = new MediaPlayer(file);
@@ -34,14 +34,12 @@ public class AudioPlayer
     public void playAudio()
     {
         players.get(quePos).play();
-        System.out.println(players.get(quePos).getMedia().getDuration());
     }
     
     public void pauseAudio()
     {
         if (players.get(quePos).getStatus().equals(Status.PAUSED))
         {
-            System.out.println("Audio is paused");
             return;
         }
         players.get(quePos).pause();
@@ -51,7 +49,6 @@ public class AudioPlayer
     {
         if (players.get(quePos).getStatus().equals(Status.PLAYING))
         {
-            System.out.println("Audio is playing");
             return;
         }
         playAudio();
@@ -62,14 +59,25 @@ public class AudioPlayer
         players.get(quePos).stop();
     }
 
-    public void playQue()
+    public void removeAudio() {
+        players.remove(quePos);
+    }
+
+    public void playQue(List<File> fileList)
     {
-        for (int i = 0; i < players.size(); i++)
-        {
-            quePos = i;
-            players.get(i).play();
-            //wait(players.get(quePos).getCycleDuration());
-        }
+        System.out.println(fileList.get(0));
+        final int[] i = {0};
+        players.get(quePos).setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                if (i[0] != fileList.size()) {
+                    i[0]++;
+                    addAudio(fileList.get(i[0]));
+                    playAudio();
+                }
+                return;
+            }
+        });
     }
 
     public void setVolume(double volume)
